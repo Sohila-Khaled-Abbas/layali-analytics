@@ -1,0 +1,141 @@
+table Fact_Order_Lines
+	lineageTag: 08bbde41-09ee-4f67-9858-b9c5124fc13e
+
+	column order_line_id
+		dataType: string
+		lineageTag: af946bdf-e2ef-4859-8864-9410659899c0
+		summarizeBy: none
+		sourceColumn: order_line_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column order_id
+		dataType: string
+		lineageTag: 53eee243-5800-4b2e-9e10-1f52240d5808
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 9954d3e7-0e21-4b23-8b31-264ff2d8d9e4
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column branch_id
+		dataType: string
+		lineageTag: af64cbe4-65ce-41bb-9b81-085bcb84c91b
+		summarizeBy: none
+		sourceColumn: branch_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_id
+		dataType: string
+		lineageTag: ae88ef13-fac3-4900-b571-d7b98771f14d
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel
+		dataType: string
+		lineageTag: f14bfb54-e4ba-42f9-aa77-37a83a71ff81
+		summarizeBy: none
+		sourceColumn: channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: 5226e387-785d-420c-91ff-ac01c0512714
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 6e837048-e8cd-46dc-a4d6-2d70da722747
+		summarizeBy: sum
+		sourceColumn: quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column unit_price_sar
+		dataType: double
+		lineageTag: 1aa205bc-ef35-4841-b7bf-ea473532f18a
+		summarizeBy: sum
+		sourceColumn: unit_price_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column unit_cost_sar
+		dataType: double
+		lineageTag: ccb19123-ec0d-4497-8104-fb86aac5a6bd
+		summarizeBy: sum
+		sourceColumn: unit_cost_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column discount_sar
+		dataType: double
+		lineageTag: b31858ea-3dcc-4007-925f-b3aa02e76fb2
+		summarizeBy: sum
+		sourceColumn: discount_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column net_sales_sar
+		dataType: double
+		lineageTag: c9f8cece-d578-42b8-bb54-06b9a4beabf2
+		summarizeBy: sum
+		sourceColumn: net_sales_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column food_cost_sar
+		dataType: double
+		lineageTag: e260beb1-37fc-49e4-8fda-0d8feac84aa5
+		summarizeBy: sum
+		sourceColumn: food_cost_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column batch_month
+		dataType: string
+		lineageTag: 2a6170a6-d575-4ce1-92ae-7bb83ce8e625
+		summarizeBy: none
+		sourceColumn: batch_month
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Order_Lines = m
+		mode: import
+		queryGroup: 02_Facts
+		source =
+				let
+				    Source = Sql.Database(SqlServer, SqlDatabase),
+				    marts_fact_order_lines = Source{[Schema = "marts", Item = "fact_order_lines"]}[Data]
+				in
+				    marts_fact_order_lines
+
+	annotation PBI_ResultType = Table
+

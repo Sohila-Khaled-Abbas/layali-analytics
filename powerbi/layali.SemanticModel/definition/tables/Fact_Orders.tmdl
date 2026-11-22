@@ -1,0 +1,124 @@
+table Fact_Orders
+	lineageTag: fc8b3ebe-1941-4726-b5ce-12bcc9c96903
+
+	column order_id
+		dataType: string
+		lineageTag: f60489eb-36c8-426f-aabd-6d75857099d1
+		summarizeBy: none
+		sourceColumn: order_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 9da00cab-662a-4062-ab34-b2028e067437
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column order_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 20cdfa8f-7ee3-4a61-8ac8-8cdab0b0cb64
+		summarizeBy: none
+		sourceColumn: order_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column branch_id
+		dataType: string
+		lineageTag: 8c9590ee-c08c-4b2a-8733-8da56ca9f857
+		summarizeBy: none
+		sourceColumn: branch_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel
+		dataType: string
+		lineageTag: 9bc97345-15d6-435f-a052-8b67041b95a3
+		summarizeBy: none
+		sourceColumn: channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		lineageTag: 065d7bdb-74b7-40ea-9423-3ef1c70eed23
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column line_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 784123a3-3d3d-4c8d-806b-96160e1d3eb2
+		summarizeBy: sum
+		sourceColumn: line_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column net_sales_sar
+		dataType: double
+		lineageTag: aac65cee-f891-4355-ac5f-673f3012eab6
+		summarizeBy: sum
+		sourceColumn: net_sales_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column food_cost_sar
+		dataType: double
+		lineageTag: 9dd18a90-113a-4f57-b6de-e9da7e4c7a1e
+		summarizeBy: sum
+		sourceColumn: food_cost_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column delivery_commission_sar
+		dataType: double
+		lineageTag: 6ef9a668-6e27-410f-aa95-30da2e4e00b7
+		summarizeBy: sum
+		sourceColumn: delivery_commission_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column contribution_sar
+		dataType: double
+		lineageTag: 8fcc89b6-73a7-4e81-b948-54c86a612f55
+		summarizeBy: sum
+		sourceColumn: contribution_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column batch_month
+		dataType: string
+		lineageTag: d4a3102d-a9dd-4f8b-addd-b939ee75d28c
+		summarizeBy: none
+		sourceColumn: batch_month
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Orders = m
+		mode: import
+		queryGroup: 02_Facts
+		source =
+				let
+				    Source = Sql.Database(SqlServer, SqlDatabase),
+				    marts_fact_orders = Source{[Schema = "marts", Item = "fact_orders"]}[Data]
+				in
+				    marts_fact_orders
+
+	annotation PBI_ResultType = Table
+

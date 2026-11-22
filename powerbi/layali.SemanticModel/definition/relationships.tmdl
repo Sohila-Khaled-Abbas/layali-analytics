@@ -1,0 +1,46 @@
+relationship ab4d3a86-c4d7-4170-b51f-2a7a77d890bf
+	fromColumn: Fact_Order_Lines.branch_id
+	toColumn: Dim_Branch.branch_id
+
+	annotation PBI_IsFromSource = FS
+
+relationship 1fbd7a93-57ff-472e-9c2b-12452f8d6ad7
+	fromColumn: Fact_Order_Lines.channel
+	toColumn: Dim_Channel.channel
+
+	annotation PBI_IsFromSource = FS
+
+relationship fcb72589-4da1-43bf-bb7e-5ce3c7364fe6
+	fromColumn: Fact_Order_Lines.customer_id
+	toColumn: Dim_Customer.customer_id
+
+	annotation PBI_IsFromSource = FS
+
+relationship 49618ab2-9c11-4056-bf4c-598322f5a2e4
+	fromColumn: Fact_Order_Lines.product_id
+	toColumn: Dim_Product.product_id
+
+	annotation PBI_IsFromSource = FS
+
+relationship fd50da41-9f5c-4113-b68e-baabfe41d758
+	fromColumn: Fact_Orders.branch_id
+	toColumn: Dim_Branch.branch_id
+
+	annotation PBI_IsFromSource = FS
+
+relationship 27e071c0-1c20-4ba4-b0f5-c3007911f133
+	fromColumn: Fact_Orders.channel
+	toColumn: Dim_Channel.channel
+
+	annotation PBI_IsFromSource = FS
+
+relationship 689e2bcd-0e72-4a44-9c3c-6c97425469ec
+	fromColumn: Fact_Orders.customer_id
+	toColumn: Dim_Customer.customer_id
+
+	annotation PBI_IsFromSource = FS
+
+relationship a820af94-8c27-f523-a07d-db0e3e5a95dc
+	fromColumn: Fact_Orders.date
+	toColumn: Dim_Date.date
+

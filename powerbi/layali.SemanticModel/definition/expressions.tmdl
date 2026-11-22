@@ -1,0 +1,16 @@
+expression SqlServer =
+		let
+		    Source = "Sohila" meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type text]
+		in
+		    Source
+	lineageTag: 739a3fe2-7e2f-4903-8dda-a101d5322d23
+	queryGroup: 00_Parameters
+
+	annotation PBI_ResultType = Text
+
+expression SqlDatabase = "LayaliAnalytics" meta [IsParameterQuery = true, IsParameterQueryRequired = false, Type = type text]
+	lineageTag: 3cd002fa-568f-45d0-9822-74ad34406564
+	queryGroup: 00_Parameters
+
+	annotation PBI_ResultType = Text
+

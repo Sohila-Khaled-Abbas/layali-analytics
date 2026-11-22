@@ -1,0 +1,32 @@
+table Dim_Channel
+	lineageTag: b844748e-37db-4f19-8019-83634080c916
+
+	column channel
+		dataType: string
+		lineageTag: 3e988a35-b6d4-4e3c-8289-e19e4817bd0b
+		summarizeBy: none
+		sourceColumn: channel
+
+		annotation SummarizationSetBy = Automatic
+
+	column channel_name
+		dataType: string
+		lineageTag: d041a9e6-68da-4521-8299-36a261996e5b
+		summarizeBy: none
+		sourceColumn: channel_name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Channel = m
+		mode: import
+		queryGroup: 01_Dimensions
+		source =
+				let
+				  Source = Sql.Database(SqlServer, SqlDatabase),
+				  #"Navigation 1" = Source{[Schema = "marts", Item = "dim_channel"]}[Data],
+				  #"Choose columns" = Table.SelectColumns(#"Navigation 1", {"channel", "channel_name"})
+				in
+				  #"Choose columns"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,24 @@
+table Dim_Customer
+	lineageTag: 2c24b08f-957f-4840-ae17-fb6578a8dae4
+
+	column customer_id
+		dataType: string
+		lineageTag: 21530765-13e3-45dd-8a4d-21c87437098d
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Customer = m
+		mode: import
+		queryGroup: 01_Dimensions
+		source =
+				let
+				  Source = Sql.Database(SqlServer, SqlDatabase),
+				  #"Navigation 1" = Source{[Schema = "marts", Item = "dim_customer"]}[Data],
+				  #"Choose columns" = Table.SelectColumns(#"Navigation 1", {"customer_id"})
+				in
+				  #"Choose columns"
+
+	annotation PBI_ResultType = Table
+

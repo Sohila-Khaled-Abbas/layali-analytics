@@ -1,0 +1,43 @@
+table Dim_Branch
+	lineageTag: e24e2333-d0a5-47bf-ae17-a98f7336e284
+
+	column branch_id
+		dataType: string
+		lineageTag: cff9c60e-3797-465a-9e77-07f9de8e6dda
+		summarizeBy: none
+		sourceColumn: branch_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column branch_name
+		dataType: string
+		lineageTag: 3c83c941-8385-4e2b-9cff-db1ca9edd99c
+		summarizeBy: none
+		sourceColumn: branch_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column opened_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 66aa70bf-7b9a-4123-a15e-2f64b7742767
+		summarizeBy: none
+		sourceColumn: opened_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition Dim_Branch = m
+		mode: import
+		queryGroup: 01_Dimensions
+		source =
+				let
+				  Source = Sql.Database(SqlServer, SqlDatabase),
+				  #"Navigation 1" = Source{[Schema = "marts", Item = "dim_branch"]}[Data],
+				  #"Choose columns" = Table.SelectColumns(#"Navigation 1", {"branch_id", "branch_name", "opened_date"})
+				in
+				  #"Choose columns"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,60 @@
+table Dim_Product
+	lineageTag: 2f960b8c-9c9b-43e9-b000-053fd89838b8
+
+	column product_id
+		dataType: string
+		lineageTag: 33c463f9-cb6d-4574-a89e-cefea927663d
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_name
+		dataType: string
+		lineageTag: e2488828-f8bf-4fa5-995e-190807abd059
+		summarizeBy: none
+		sourceColumn: product_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: f4b13847-49b1-4ce7-b21c-5ea073fd125c
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column unit_price_sar
+		dataType: double
+		lineageTag: 747ea816-2980-4f3c-bc68-659fe7c4b347
+		summarizeBy: none
+		sourceColumn: unit_price_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column unit_cost_sar
+		dataType: double
+		lineageTag: 5dbe5b41-e877-4c72-a52d-9a1e47521b96
+		summarizeBy: none
+		sourceColumn: unit_cost_sar
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Dim_Product = m
+		mode: import
+		queryGroup: 01_Dimensions
+		source =
+				let
+				  Source = Sql.Database(SqlServer, SqlDatabase),
+				  #"Navigation 1" = Source{[Schema = "marts", Item = "dim_product"]}[Data],
+				  #"Choose columns" = Table.SelectColumns(#"Navigation 1", {"product_id", "product_name", "category", "unit_price_sar", "unit_cost_sar"})
+				in
+				  #"Choose columns"
+
+	annotation PBI_ResultType = Table
+

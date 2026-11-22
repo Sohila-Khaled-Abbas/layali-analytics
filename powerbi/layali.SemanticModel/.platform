@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "layali"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e84c3b87-4405-458f-a111-cfe5cbb71a1e"
+  }
+}
