@@ -1,0 +1,9 @@
+# Pinned compatible versions for Layali Analytics (Python 3.14 on Windows 64-bit)
+python-dotenv==1.2.4
+pyodbc==5.5.0
+pandas==3.1.1
+pydantic==2.14.4
+SQLAlchemy==2.1.9
+faker==40.63.0
+pytest==9.2.0
+openpyxl==3.1.5

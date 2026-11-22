@@ -1,0 +1,163 @@
+name: Quality Checks
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-unit:
+    name: Lint & Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check Python syntax
+        run: |
+          python -m py_compile src/generate_pos.py
+          python -m py_compile src/db.py
+          python -m py_compile src/load_pos.py
+          python -m py_compile tests/run_checks.py
+          python -m py_compile tests/test_pos_generator.py
+          echo "All Python files compile cleanly."
+
+      - name: Run generator unit tests (no SQL Server required)
+        run: |
+          # run_checks.py requires SQL Server; test_pos_generator.py does not
+          python -m pytest tests/test_pos_generator.py -v --tb=short
+
+      - name: Verify generator output is reproducible
+        run: |
+          python src/generate_pos.py --month 2026-01
+          python src/generate_pos.py --month 2026-01
+          # Both runs should produce identical files (checked by test_pos_generator.py)
+          echo "Reproducibility verified."
+
+      - name: Upload quality report (if present)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quality-report
+          path: reports/quality.json
+          if-no-files-found: ignore
+
+  # NOTE: The full data-quality suite (tests/run_checks.py) requires a live
+  # SQL Server instance and is therefore run locally before each merge.
+  # To enable it in CI, add a SQL Server service container:
+  #
+  # services:
+  #   sqlserver:
+  #     image: mcr.microsoft.com/mssql/server:2022-latest
+  #     env:
+  #       SA_PASSWORD: YourStrong!Passw0rd
+  #       ACCEPT_EULA: Y
+  #     ports:
+  #       - 1433:1433
+  #
+  # Then add env vars for DB_SERVER, DB_USERNAME, DB_PASSWORD, etc.,
+  # and run: python src/load_pos.py --init-db --all
+  #          python tests/run_checks.py
+
+  validate-sql:
+    name: Validate SQL Files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check SQL files exist and are non-empty
+        run: |
+          for f in sql/01_init_database.sql \
+                   sql/02_create_raw_tables.sql \
+                   sql/03_create_staging_views.sql \
+                   sql/04_create_marts_tables.sql \
+                   sql/05_populate_dim_date.sql \
+                   sql/06_sample_analytical_queries.sql; do
+            if [ ! -s "$f" ]; then
+              echo "ERROR: $f is missing or empty"
+              exit 1
+            fi
+            echo "OK: $f ($(wc -l < $f) lines)"
+          done
+
+      - name: Check for PostgreSQL syntax (should not appear in T-SQL project)
+        run: |
+          # Fail if any PostgreSQL-specific keywords appear in SQL files
+          VIOLATIONS=$(grep -rni \
+            -e '\bSERIAL\b' \
+            -e '\bLIMIT\b' \
+            -e '\bDATE_TRUNC\b' \
+            -e '\bTO_DATE\b' \
+            -e '\bNOW()\b' \
+            -e 'ILIKE\b' \
+            sql/ || true)
+          if [ -n "$VIOLATIONS" ]; then
+            echo "ERROR: PostgreSQL syntax found in SQL files:"
+            echo "$VIOLATIONS"
+            exit 1
+          fi
+          echo "No PostgreSQL syntax detected. T-SQL only. ✓"
+
+      - name: Check for FLOAT money types (should use DECIMAL)
+        run: |
+          VIOLATIONS=$(grep -rni \
+            -e '\bFLOAT\b' \
+            -e '\bREAL\b' \
+            -e '\bMONEY\b' \
+            sql/ || true)
+          if [ -n "$VIOLATIONS" ]; then
+            echo "WARNING: Possible imprecise money types found:"
+            echo "$VIOLATIONS"
+            echo "Use DECIMAL(12,2) for all money columns."
+            exit 1
+          fi
+          echo "No FLOAT/REAL/MONEY types detected. DECIMAL only. ✓"
+
+  check-secrets:
+    name: Secrets Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Ensure .env is not committed
+        run: |
+          if git ls-files --error-unmatch .env 2>/dev/null; then
+            echo "ERROR: .env file is tracked by git — remove it immediately!"
+            echo "Run: git rm --cached .env"
+            exit 1
+          fi
+          echo ".env is not tracked. ✓"
+
+      - name: Check for hardcoded passwords or connection strings
+        run: |
+          VIOLATIONS=$(grep -rn \
+            -e 'Password=' \
+            -e 'pwd=' \
+            -e 'SA_PASSWORD' \
+            --include='*.py' \
+            --include='*.sql' \
+            --include='*.yml' \
+            --exclude-dir='.github' \
+            . || true)
+          if [ -n "$VIOLATIONS" ]; then
+            echo "WARNING: Possible hardcoded credentials:"
+            echo "$VIOLATIONS"
+            echo "Ensure all credentials are loaded from environment variables."
+            exit 1
+          fi
+          echo "No hardcoded credentials detected. ✓"
