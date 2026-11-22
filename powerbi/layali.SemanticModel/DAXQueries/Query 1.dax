@@ -1,0 +1,10 @@
+EVALUATE
+ROW(
+    "dim_date", COUNTROWS ( dim_date ),
+    "dim_branch", COUNTROWS ( dim_branch ),
+    "dim_product", COUNTROWS ( dim_product ),
+    "dim_channel", COUNTROWS ( dim_channel ),
+    "dim_customer", COUNTROWS ( dim_customer ),
+    "fact_orders", COUNTROWS ( fact_orders ),
+    "fact_order_lines", COUNTROWS ( fact_order_lines )
+)

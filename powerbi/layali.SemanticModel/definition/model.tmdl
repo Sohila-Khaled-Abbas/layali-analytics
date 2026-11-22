@@ -21,7 +21,7 @@ queryGroup 02_Facts
 
 annotation __PBI_TimeIntelligenceEnabled = 0
 
-annotation PBI_ProTooling = ["DevMode"]
+annotation PBI_ProTooling = ["DevMode","DaxQueryView_Desktop"]
 
 annotation PBI_QueryOrder = ["SqlServer","SqlDatabase","Dim_Branch","Dim_Channel","Dim_Customer","Dim_Date","Dim_Product","Fact_Order_Lines","Fact_Orders"]
 

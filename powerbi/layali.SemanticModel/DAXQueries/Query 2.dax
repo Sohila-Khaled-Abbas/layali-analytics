@@ -1,0 +1,6 @@
+EVALUATE
+ROW(
+    "orders_net_sales", SUM ( fact_orders[net_sales_sar] ),
+    "lines_net_sales", SUM ( fact_order_lines[net_sales_sar] ),
+    "contribution", SUM ( fact_orders[contribution_sar] )
+)
