@@ -8,7 +8,7 @@
 [![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-CC2927?style=for-the-badge&logo=microsoftsqlserver&logoColor=white)](https://www.microsoft.com/en-us/sql-server)
 [![Power BI](https://img.shields.io/badge/Power%20BI-Desktop-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)](https://powerbi.microsoft.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
-[![CI](https://img.shields.io/github/actions/workflow/status/YOUR_USERNAME/layali-analytics/quality_checks.yml?style=for-the-badge&label=Quality%20Checks)](https://github.com/YOUR_USERNAME/layali-analytics/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/Sohila-Khaled-Abbas/layali-analytics/quality_checks.yml?style=for-the-badge&label=Quality%20Checks)](https://github.com/Sohila-Khaled-Abbas/layali-analytics/actions)
 [![T-SQL](https://img.shields.io/badge/T--SQL-Only-0078D4?style=for-the-badge&logo=microsoftsqlserver&logoColor=white)](sql/)
 [![pytest](https://img.shields.io/badge/tests-21%20passing-brightgreen?style=for-the-badge&logo=pytest&logoColor=white)](tests/)
 
@@ -235,7 +235,7 @@ This is the **fact-at-the-right-grain** principle from Kimball's dimensional mod
 ### 1 — Clone & Environment
 
 ```powershell
-git clone https://github.com/YOUR_USERNAME/layali-analytics.git
+git clone https://github.com/Sohila-Khaled-Abbas/layali-analytics.git
 cd layali-analytics
 
 # Create virtual environment

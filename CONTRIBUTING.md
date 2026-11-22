@@ -16,7 +16,7 @@ Thank you for your interest in contributing! This project is a teaching referenc
 
 ```powershell
 # Clone and enter the repo
-git clone https://github.com/YOUR_USERNAME/layali-analytics.git
+git clone https://github.com/Sohila-Khaled-Abbas/layali-analytics.git
 cd layali-analytics
 
 # Create virtual environment
